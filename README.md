@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إلى دلوعتي فوفي 🤍</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffcad4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+            padding: 20px;
+        }
+
+        /* واجهة حظر الدخول بكلمة سر */
+        #lockScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffcad4 100%);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lock-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .lock-container h2 {
+            color: #ff4d6d;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .lock-container p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ffccd5;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .password-input:focus {
+            border-color: #ff4d6d;
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.2);
+        }
+
+        /* حاوية العرض الأساسية */
+        .presentation-container {
+            width: 100%;
+            max-width: 550px;
+            height: 500px;
+            position: relative;
+            display: none; /* مخفي حتى كتابة الباسورد */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(50px) scale(0.95);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            z-index: 2;
+        }
+
+        .slide-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: pulseIcon 1.5s infinite alternate;
+        }
+
+        @keyframes pulseIcon {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        h2 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .slide-content {
+            font-size: 1.1rem;
+            color: #4a4a4a;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+
+        .text-scroll {
+            max-height: 240px;
+            overflow-y: auto;
+            text-align: right;
+            padding-right: 8px;
+        }
+        .text-scroll::-webkit-scrollbar { width: 5px; }
+        .text-scroll::-webkit-scrollbar-thumb { background: #ffb3c1; border-radius: 10px; }
+
+        .nav-btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            transition: all 0.3s ease;
+            margin-top: auto;
+        }
+
+        .nav-btn:hover {
+            background: #ff758f;
+            transform: translateY(-2px);
+        }
+
+        .choice-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            justify-content: center;
+            min-height: 50px;
+        }
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .btn-agree { background: #ff4d6d; color: white; }
+        .btn-disagree { background: #f0f0f0; color: #777; position: relative; }
+
+        .final-happy { display: none; animation: pop 0.5s ease forwards; }
+        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <!-- واجهة الدخول بكلمة السر ليسا -->
+    <div id="lockScreen">
+        <div class="lock-container">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔒✨</div>
+            <h2>مكان سري خاص بـ فوفي 🤍</h2>
+            <p>هذا الرابط مبرمج ليعبر عن اعتذار شخص يحبك بجنون.. لفتح الرسالة، يرجى كتابة اسم بنتنا الدلوعة كـ كلمة سر للعبور 🥰👇</p>
+            <input type="text" id="passwordField" class="password-input" placeholder="اكتبي اسم بنتنا هنا..." onkeypress="checkEnter(event)">
+            <button class="nav-btn" onclick="verifyPassword()" style="margin-top: 10px; width: 100%;">فتح القفل 🔑</button>
+        </div>
+    </div>
+
+    <!-- حاوية السلايدات (الموقع الأصلي) -->
+    <div class="presentation-container" id="mainContainer">
+
+        <!-- الشريحة 1: البداية الجديدة المشوقة -->
+        <div class="slide active" id="slide1">
+            <div class="slide-icon">💌💫</div>
+            <h2>أهلاً بكِ في عالمي الصغير.. ✨</h2>
+            <div class="slide-content">
+                <p>سويت لك هالمكان المخصص والمقفل باسم غالي علينا، بس عشان تفهمي شحال غالية في قلبي ومكانتكِ ما تعوضها أي وحدة في هالدنيا.. اضغطي تحت وخلي قلبي يكلمك 🥺👇</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(2)">ادخلي يا دلوعتي ❤️</button>
+        </div>
+
+        <!-- الشريحة 2: المبررات الأولى -->
+        <div class="slide" id="slide2">
+            <div class="slide-icon">🥺❤️</div>
+            <h2>أنا نادم بزاف..</h2>
+            <div class="slide-content text-scroll">
+                <p>يا فوفي… يا بنتي… والله ما نعرف منين نبدا باش نقولك قداه أنا نادم على الغلطة اللي صرات مني. يمكن ما عرفتش نتصرف صح، ويمكن غشكي كان ثقيل بزاف على قلبك، وهاد الشي يوجعني أكثر ما يوجعك انتي. خاطر آخر حاجة كنت نحبها هي نشوف الزعل فعينيك ولا نحس بلي دلوعتي متأذية بسببي.</p>
+                <p style="margin-top:12px;">يا ماماتي، انتي موش أي وحدة بالنسبة ليا باش نهون زعلك بسهولة. انتي البنت اللي نخاف عليها من نسمة، والبنت اللي مجرد تغيّر نبرتها معايا يخليني نتقلق وما نقدرش نرتاح.</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(3)">كملي القراءة.. 👀</button>
+        </div>
+
+        <!-- الشريحة 3: المشاعر والتعلق -->
+        <div class="slide" id="slide3">
+            <div class="slide-icon">🧸✨</div>
+            <h2>انتي روحي ونبضي</h2>
+            <div class="slide-content text-scroll">
+                <p>كيفاه نقدر نشوفك متغششة مني وأنا أصلاً قلبي متعلق بيك انتي؟ والله غير صعيبة عليا بزاف. أنا عارف بلي الغشك ثقيل، وعارف بلي يمكن جرحتك، بصح صدقيني ما كانش فقلبي حتى نية تخليك تحسي بهاد التعب. </p>
+                <p style="margin-top:12px;">أنا مجرد إنسان يحبك بجنون، ويغلط أحياناً، بصح عمره ما يقدر يستغنى عليك ولا يشوف غيرك. انتي دلوعتي، وبنتي, وماماتي اللي نلقى عندها راحتي، وكيفاش نرضى عليك تكوني زعلانة مني؟ والله يا بنتي كي تكوني متغششة، الدنيا تولي ثقيلة فعيوني.</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(4)">وشوفِ بعد.. 🥰</button>
+        </div>
+
+        <!-- الشريحة 4: دلالها وجمالها -->
+        <div class="slide" id="slide4">
+            <div class="slide-icon">👑🌸</div>
+            <h2>كيفاش ما نذوبش فيك؟</h2>
+            <div class="slide-content text-scroll">
+                <p>نولي غير نستنى رسالة منك، كلمة منك، أي حاجة ترجعلي الروح. لأنك انتي اللي تضحكي قلبي، وانتي اللي تهدي روحي، وحتى الأمان اللي نحسو ما نلقاه غير معاك. وزيد… كيفاش ما نذوبش فيك وانتي بهاد الجمال كامل؟ عينيك وحدهم يخلوني ننسى الكلام كامل.</p>
+                <p style="margin-top:12px;">كي تشوفيني بنظرة وحدة نحس روحي ضعت فيك. ووجهك يا ماماتي؟ والله نعمة. ضحكتك تخلي الواحد يحب يعيش غير باش شوفها كل يوم. وحتى كي تكوني متغششة، تبقي كيوت بطريقة تقتلني وتخليني نحب نراضيك أكثر وأكثر.</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(5)">آخر حاجة.. 🥺</button>
+        </div>
+
+        <!-- الشريحة 5: النهاية والقرار التفاعلي -->
+        <div class="slide" id="slide5">
+            <div id="decisionSection">
+                <div class="slide-icon">💖💍</div>
+                <h2>سامحيني يا كل دنيتي</h2>
+                <div class="slide-content">
+                    <p>يا بنتي، نحبك بطريقة ما تتوصفش. نحب صوتك، دلالك، غيرتك، وحتى الطريقة اللي تتغششي بيا. لأنك بكل حالاتك تبقي أجمل بنت شافتها عيني. وإذا كنت غلطت، سامحيني… خاطر والله ما نقدر نخسر إنسانة كيما انتي. تعالي هنا يا دلوعتي… خلي هاد الزعل يروح، وخلييني نرجع نسمع ضحكتك اللي تردلي الروح.</p>
+                    <p style="font-weight: bold; color: #ff4d6d; margin-top: 15px; font-size: 1.15rem;">خلاص سامحتيني؟ 👉👈</p>
+                </div>
+                <div class="choice-container">
+                    <button class="action-btn btn-agree" onclick="forgive()">خلاص سامحتك بـ شروط! 😉</button>
+                    <button class="action-btn btn-disagree" id="noBtn" onmouseover="runAway()">لَّا، لسه زعلانة 😤</button>
+                </div>
+            </div>
+
+            <!-- الرسالة السرية عند الموافقة -->
+            <div class="final-happy" id="happyMessage">
+                <div class="slide-icon">🎉🥳❤️</div>
+                <h2>يا بختي ويا فرحة قلبي!</h2>
+                <p style="color: #4a4a4a; line-height: 1.7; font-size: 1.15rem;">كنت متأكد إن قلب ماماتي الأبيض ودلوعتي ما يخلينيش هكا! الحين اجهزي واكتبي كل شروطك وطلباتك للرضا (طلباتك أوامر)، وأنا كلي آذان صاغية ومستعد نلبي كلش.</p>
+                <p style="margin-top: 25px; font-weight: bold; color: #ff4d6d; font-size: 1.4rem;">نموت فيك يا فوفي! 💍👑</p>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // التحقق من كلمة السر "ليسا"
+        const correctPasswords = ["ليسا", "lisa"]; 
+
+        function verifyPassword() {
+            const enteredInput = document.getElementById('passwordField').value.trim().toLowerCase();
+            
+            if (correctPasswords.includes(enteredInput)) { 
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            } else {
+                alert("امممم.. كلمة السر خطأ، فكري في اسم دلوعتنا الصغيرة! 🥺");
+            }
+        }
+
+        function checkEnter(event) {
+            if (event.key === "Enter") { verifyPassword(); }
+        }
+
+        function nextSlide(slideNumber) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById('slide' + slideNumber).classList.add('active');
+        }
+
+        function runAway() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.getElementById('slide5');
+            const padding = 30;
+            const maxX = container.clientWidth - noBtn.clientWidth - padding;
+            const maxY = container.clientHeight - noBtn.clientHeight - 100;
+            const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
+            const randomY = Math.floor(Math.random() * maxY) - (maxY / 2);
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `calc(50% + ${randomX}px - ${noBtn.clientWidth / 2}px)`;
+            noBtn.style.top = `calc(65% + ${randomY}px)`;
+        }
+
+        function forgive() {
+            document.getElementById('decisionSection').style.display = 'none';
+            document.getElementById('happyMessage').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
