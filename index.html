@@ -3,330 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>قرار نهائي..</title>
+    <title>إلى دلوعتي فوفي 🤍</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Tajawal', sans-serif;
         }
 
-        body, html {
+        body {
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffcad4 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            perspective: 1000px;
+            padding: 20px;
+        }
+
+        /* واجهة حظر الدخول بكلمة سر */
+        #lockScreen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #ffe5ec 0%, #ffcad4 100%);
+            z-index: 999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .lock-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 24px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            border: 2px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .lock-container h2 {
+            color: #ff4d6d;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .lock-container p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #ffccd5;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            text-align: center;
+            outline: none;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        .password-input:focus {
+            border-color: #ff4d6d;
+            box-shadow: 0 0 10px rgba(255, 77, 109, 0.2);
+        }
+
+        /* حاوية العرض الأساسية */
+        .presentation-container {
+            width: 100%;
+            max-width: 550px;
+            height: 500px;
+            position: relative;
+            display: none; /* مخفي حتى كتابة الباسورد */
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
             height: 100%;
-            background-color: #0c0c0c;
-            overflow-x: hidden;
-            transition: background 2s ease;
-        }
-
-        /* --- شاشة المقلب --- */
-        .prank-screen {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 35px rgba(255, 182, 193, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.6);
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            padding: 30px;
-            text-align: center;
-            color: #b3b3b3;
-            opacity: 1;
-            transition: opacity 1.5s ease;
-            position: relative;
-            z-index: 10;
-        }
-
-        .prank-text {
-            font-size: 19px;
-            line-height: 1.8;
-            max-width: 650px;
-            margin-bottom: 30px;
-            white-space: pre-line;
-            color: #999;
-        }
-
-        .prank-btn {
-            background-color: #222;
-            color: #888;
-            border: 1px solid #444;
-            padding: 14px 35px;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: all 0.4s ease;
-        }
-
-        .prank-btn:hover {
-            background-color: #c1272d;
-            color: #fff;
-            border-color: #c1272d;
-            box-shadow: 0 0 15px rgba(193, 39, 45, 0.4);
-        }
-
-        /* --- شاشة المفاجأة --- */
-        .surprise-screen {
-            display: none;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 40px 20px;
             text-align: center;
             opacity: 0;
-            transition: opacity 2s ease;
-            position: relative;
-            z-index: 10;
+            visibility: hidden;
+            transform: translateX(50px) scale(0.95);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* تغيير الخلفية لتصبح صورة العيون كاملة الشاشة */
-        .love-bg {
-            background-image: linear-gradient(rgba(7, 1, 6, 0.75), rgba(44, 5, 33, 0.75)), url('image_3.png') !important;
-            background-size: cover !important;
-            background-position: center !important;
-            background-repeat: no-repeat !important;
-            background-attachment: fixed !important;
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0) scale(1);
+            z-index: 2;
         }
 
-        .surprise-title {
-            font-size: 38px;
-            color: #ff3366;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px rgba(255, 51, 102, 0.6);
+        .slide-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            animation: pulseIcon 1.5s infinite alternate;
         }
 
-        .surprise-subtitle {
-            font-size: 22px;
-            color: #fff;
-            margin-bottom: 40px;
-            font-weight: 300;
+        @keyframes pulseIcon {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
         }
 
-        /* العداد الرقمي */
-        .counter-container {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
+        h2 {
+            color: #ff4d6d;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
         }
 
-        .counter-box {
-            background: rgba(0, 0, 0, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 15px 25px;
-            border-radius: 12px;
-            backdrop-filter: blur(8px);
-            min-width: 100px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        .slide-content {
+            font-size: 1.1rem;
+            color: #4a4a4a;
+            line-height: 1.8;
+            margin-bottom: 25px;
+            width: 100%;
         }
 
-        .counter-num {
-            font-size: 32px;
+        .text-scroll {
+            max-height: 240px;
+            overflow-y: auto;
+            text-align: right;
+            padding-right: 8px;
+        }
+        .text-scroll::-webkit-scrollbar { width: 5px; }
+        .text-scroll::-webkit-scrollbar-thumb { background: #ffb3c1; border-radius: 10px; }
+
+        .nav-btn {
+            background: #ff4d6d;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.05rem;
             font-weight: bold;
-            color: #fff;
-            display: block;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+            transition: all 0.3s ease;
+            margin-top: auto;
         }
 
-        .counter-label {
-            font-size: 13px;
-            color: #ff3366;
-            margin-top: 5px;
-            display: block;
+        .nav-btn:hover {
+            background: #ff758f;
+            transform: translateY(-2px);
         }
 
-        .love-letter {
-            font-size: 20px;
-            color: #ffe6ed;
-            max-width: 600px;
-            line-height: 2;
-            background: rgba(0, 0, 0, 0.65);
-            padding: 25px;
-            border-radius: 15px;
-            border-right: 4px solid #ff3366;
-            white-space: pre-line;
-            backdrop-filter: blur(8px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+        .choice-container {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            position: relative;
+            width: 100%;
+            justify-content: center;
+            min-height: 50px;
         }
+        .action-btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .btn-agree { background: #ff4d6d; color: white; }
+        .btn-disagree { background: #f0f0f0; color: #777; position: relative; }
 
-        /* قلوب متساقطة */
-        .heart-particle {
-            position: absolute;
-            color: rgba(255, 51, 102, 0.85);
-            pointer-events: none;
-            animation: fall linear forwards;
-            z-index: 5;
-            top: -50px;
-        }
-
-        @keyframes fall {
-            to {
-                transform: translateY(105vh) rotate(360deg);
-            }
-        }
+        .final-happy { display: none; animation: pop 0.5s ease forwards; }
+        @keyframes pop { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <!-- جلب الأغنية عبر وسم مخصص للعمل بكفاءة في المجلد الموحد لاحقاً -->
-    <audio id="bgMusic" src="jelaba.mp3" loop></audio>
-
-    <!-- شاشة المقلب -->
-    <div class="prank-screen" id="prankScreen">
-        <div class="prank-text">
-أنا تعبت نحاول نحافظ على علاقة نحس روحي فيها وحدي.
-زمان كنت نحس بلي عندي قيمة عندك، أما توا وليت نحس روحي مجرد شخص زيادة في حياتك.
-
-الاهتمام لي كنت نشوفو منك اختفى، والكلام تبدل، وحتى وجودي وغيابي ما عادش يفرق معاك كيف قبل.
-وأصعب إحساس ممكن يعيشه الإنسان هو كي يحس روحو مذلول وهو يحاول يتمسك بواحد يحبو.
-
-أنا حبيتك بصدق، وعطيتك من قلبي أكثر مما تتصوري، بصح الحب وحده ما يكفيش إذا الطرف الثاني ما عادش يحس ولا يهتم.
-وصدقيني ما كانش سهل عليا نوصل لهاذ القرار، لأنك كنتي حاجة كبيرة عندي.
-
-بصح كرامتي وراحتي النفسية أهم من إني نبقى نجري وراء اهتمام ما عادش موجود.
-لهذا قررت نبعد، مو كرها فيك… بالعكس، لأني كنت نبغيك بزاف.
-
-نتمنى تلقاي السعادة في حياتك، ونتمنى الأيام تكون حلوة عليك دائمًا.
-أما أنا… لازم نتعلم نحب روحي شوية ثاني.
+    <!-- واجهة الدخول بكلمة السر ليسا -->
+    <div id="lockScreen">
+        <div class="lock-container">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔒✨</div>
+            <h2>مكان سري خاص بـ فوفي 🤍</h2>
+            <p>هذا الرابط مبرمج ليعبر عن اعتذار شخص يحبك بجنون.. لفتح الرسالة، يرجى كتابة اسم بنتنا الدلوعة كـ كلمة سر للعبور 🥰👇</p>
+            <input type="text" id="passwordField" class="password-input" placeholder="اكتبي اسم بنتنا هنا..." onkeypress="checkEnter(event)">
+            <button class="nav-btn" onclick="verifyPassword()" style="margin-top: 10px; width: 100%;">فتح القفل 🔑</button>
         </div>
-        <button class="prank-btn" onclick="triggerSurprise()">اضغطي هنا لرؤية كلمتي الأخيرة</button>
     </div>
 
-    <!-- شاشة المفاجأة -->
-    <div class="surprise-screen" id="surpriseScreen">
-        
-        <h1 class="surprise-title">صدمتك صح؟ 🥺 نموت فيك يا روحي!</h1>
-        <p class="surprise-subtitle">مستحيل نخلي عليك، هذا كان مجرد مقلب عشان تشوفي غلاوتك.. الحكاية وما فيها:</p>
-        
-        <!-- العداد الزمني -->
-        <div class="counter-container">
-            <div class="counter-box"><span class="counter-num" id="days">72</span><span class="counter-label">يوم</span></div>
-            <div class="counter-box"><span class="counter-num" id="hours">00</span><span class="counter-label">ساعة</span></div>
-            <div class="counter-box"><span class="counter-num" id="minutes">00</span><span class="counter-label">دقيقة</span></div>
-            <div class="counter-box"><span class="counter-num" id="seconds">00</span><span class="counter-label">ثانية</span></div>
+    <!-- حاوية السلايدات (الموقع الأصلي) -->
+    <div class="presentation-container" id="mainContainer">
+
+        <!-- الشريحة 1: البداية الجديدة المشوقة -->
+        <div class="slide active" id="slide1">
+            <div class="slide-icon">💌💫</div>
+            <h2>أهلاً بكِ في عالمي الصغير.. ✨</h2>
+            <div class="slide-content">
+                <p>سويت لك هالمكان المخصص والمقفل باسم غالي علينا، بس عشان تفهمي شحال غالية في قلبي ومكانتكِ ما تعوضها أي وحدة في هالدنيا.. اضغطي تحت وخلي قلبي يكلمك 🥺👇</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(2)">ادخلي يا دلوعتي ❤️</button>
         </div>
 
-        <div class="love-letter">
-رفيف…
-يا أجمل صدفة دخلت لحياتي، ويا أحلى ضحكة عرفها قلبي 🤍
-
-والله من نهار عرفتك وأنا نحس بلي الدنيا ولات أخف،
-وكل شيء في حياتي تبدل بطريقة مستحيل نفسرها.
-
-يا بنتي…
-انتي مو مجرد بنت نحبها،
-انتي الإحساس لي خلاني نرجع نبتسم من قلبي،
-والإنسانة الوحيدة لي قدرت تدخل لروحي بهاذ العمق بدون ما تحاول.
-
-يا ماماتي…
-تعرفي بلي ضحكتك وحدها تقدر تصلح يوم كامل عندي؟
-ربي شاهد بلي كي تضحكي نحس قلبي يهدى وحدو،
-وكأن الدنيا كلها توقف باش نتأمل هاذ الجمال لي فيك.
-
-وعيونك يا حبوبتي…
-وش نحكي ووش نخلي؟
-عيونك فيهم سحر بطريقة تخلي الواحد يضيع وهو يشوف فيهم،
-فيهم حنان، دفا، وأنوثة تخلي القلب يدوب بدون استئذان.
-
-أقسم بلي كل مرة نشوف عيونك نحس بلي ما فيش بنت بالدنيا كلها تقدر تشبهك،
-وكأن ربي خلق الجمال كامل وحطو في نظرة منك.
-
-ويا دلوعتي…
-حتى تفاصيلك الصغيرة نحبها،
-طريقة كلامك، دلعك، غيرتك، وحتى سكوتك عندو تأثير عليا.
-
-شعرك، ملامحك، ضحكتك، وطريقتك فالاهتمام…
-كل شيء فيك يخليني نتعلق بيك أكثر بدون ما نحس.
-
-وصدقيني يا فوفي…
-مهما نكتب عليك يبقى الكلام قليل،
-لأنك مو مجرد إنسانة جميلة،
-انتي راحة نفسية، وطن، وحياة كاملة بالنسبة ليا.
-
-أنا ما حبيتش شكلك فقط،
-أنا حبيت روحك، قلبك، والطريقة لي تخليني نحس روحي أهم شخص عندك.
-
-حبيت فيك الحنان لي في صوتك،
-والاهتمام لي يبان حتى فأتفه التفاصيل،
-وحبيت الإحساس لي يجيني كي نهدر معاك،
-إحساس مستحيل نلقاه مع أي شخص ثاني.
-
-تعرفي يا بنتي؟
-أنا نحبك بطريقة تخوف،
-لدرجة بلي مجرد زعلك يوجعني،
-وغيابك يخليني نحس بلي حاجة ناقصة مني.
-
-نفكر فيك أكثر مما تتخيلي،
-ونتعلق بيك أكثر كل يوم،
-وكل مرة نهدر معاك نحس روحي وقعت في حبك من جديد.
-
-ربي شاهد بلي قلبي اختارك انتي بدون تردد،
-ولو يعطوني ألف بنت غيرك…
-قلبي يبقى يشوفك انتي الأجمل، والأحن، والأقرب لروحي.
-
-يا رفيف…
-يا بنتي…
-يا ماماتي…
-يا فوفي…
-يا حبوبتي…
-يا دلوعتي…
-
-انتي الحاجة الحلوة لي صارتلي،
-والحب الوحيد لي تمنيت يدوم للأبد ❤
+        <!-- الشريحة 2: المبررات الأولى -->
+        <div class="slide" id="slide2">
+            <div class="slide-icon">🥺❤️</div>
+            <h2>أنا نادم بزاف..</h2>
+            <div class="slide-content text-scroll">
+                <p>يا فوفي… يا بنتي… والله ما نعرف منين نبدا باش نقولك قداه أنا نادم على الغلطة اللي صرات مني. يمكن ما عرفتش نتصرف صح، ويمكن غشكي كان ثقيل بزاف على قلبك، وهاد الشي يوجعني أكثر ما يوجعك انتي. خاطر آخر حاجة كنت نحبها هي نشوف الزعل فعينيك ولا نحس بلي دلوعتي متأذية بسببي.</p>
+                <p style="margin-top:12px;">يا ماماتي، انتي موش أي وحدة بالنسبة ليا باش نهون زعلك بسهولة. انتي البنت اللي نخاف عليها من نسمة، والبنت اللي مجرد تغيّر نبرتها معايا يخليني نتقلق وما نقدرش نرتاح.</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(3)">كملي القراءة.. 👀</button>
         </div>
+
+        <!-- الشريحة 3: المشاعر والتعلق -->
+        <div class="slide" id="slide3">
+            <div class="slide-icon">🧸✨</div>
+            <h2>انتي روحي ونبضي</h2>
+            <div class="slide-content text-scroll">
+                <p>كيفاه نقدر نشوفك متغششة مني وأنا أصلاً قلبي متعلق بيك انتي؟ والله غير صعيبة عليا بزاف. أنا عارف بلي الغشك ثقيل، وعارف بلي يمكن جرحتك، بصح صدقيني ما كانش فقلبي حتى نية تخليك تحسي بهاد التعب. </p>
+                <p style="margin-top:12px;">أنا مجرد إنسان يحبك بجنون، ويغلط أحياناً، بصح عمره ما يقدر يستغنى عليك ولا يشوف غيرك. انتي دلوعتي، وبنتي, وماماتي اللي نلقى عندها راحتي، وكيفاش نرضى عليك تكوني زعلانة مني؟ والله يا بنتي كي تكوني متغششة، الدنيا تولي ثقيلة فعيوني.</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(4)">وشوفِ بعد.. 🥰</button>
+        </div>
+
+        <!-- الشريحة 4: دلالها وجمالها -->
+        <div class="slide" id="slide4">
+            <div class="slide-icon">👑🌸</div>
+            <h2>كيفاش ما نذوبش فيك؟</h2>
+            <div class="slide-content text-scroll">
+                <p>نولي غير نستنى رسالة منك، كلمة منك، أي حاجة ترجعلي الروح. لأنك انتي اللي تضحكي قلبي، وانتي اللي تهدي روحي، وحتى الأمان اللي نحسو ما نلقاه غير معاك. وزيد… كيفاش ما نذوبش فيك وانتي بهاد الجمال كامل؟ عينيك وحدهم يخلوني ننسى الكلام كامل.</p>
+                <p style="margin-top:12px;">كي تشوفيني بنظرة وحدة نحس روحي ضعت فيك. ووجهك يا ماماتي؟ والله نعمة. ضحكتك تخلي الواحد يحب يعيش غير باش شوفها كل يوم. وحتى كي تكوني متغششة، تبقي كيوت بطريقة تقتلني وتخليني نحب نراضيك أكثر وأكثر.</p>
+            </div>
+            <button class="nav-btn" onclick="nextSlide(5)">آخر حاجة.. 🥺</button>
+        </div>
+
+        <!-- الشريحة 5: النهاية والقرار التفاعلي -->
+        <div class="slide" id="slide5">
+            <div id="decisionSection">
+                <div class="slide-icon">💖💍</div>
+                <h2>سامحيني يا كل دنيتي</h2>
+                <div class="slide-content">
+                    <p>يا بنتي، نحبك بطريقة ما تتوصفش. نحب صوتك، دلالك، غيرتك، وحتى الطريقة اللي تتغششي بيا. لأنك بكل حالاتك تبقي أجمل بنت شافتها عيني. وإذا كنت غلطت، سامحيني… خاطر والله ما نقدر نخسر إنسانة كيما انتي. تعالي هنا يا دلوعتي… خلي هاد الزعل يروح، وخلييني نرجع نسمع ضحكتك اللي تردلي الروح.</p>
+                    <p style="font-weight: bold; color: #ff4d6d; margin-top: 15px; font-size: 1.15rem;">خلاص سامحتيني؟ 👉👈</p>
+                </div>
+                <div class="choice-container">
+                    <button class="action-btn btn-agree" onclick="forgive()">خلاص سامحتك بـ شروط! 😉</button>
+                    <button class="action-btn btn-disagree" id="noBtn" onmouseover="runAway()">لَّا، لسه زعلانة 😤</button>
+                </div>
+            </div>
+
+            <!-- الرسالة السرية عند الموافقة -->
+            <div class="final-happy" id="happyMessage">
+                <div class="slide-icon">🎉🥳❤️</div>
+                <h2>يا بختي ويا فرحة قلبي!</h2>
+                <p style="color: #4a4a4a; line-height: 1.7; font-size: 1.15rem;">كنت متأكد إن قلب ماماتي الأبيض ودلوعتي ما يخلينيش هكا! الحين اجهزي واكتبي كل شروطك وطلباتك للرضا (طلباتك أوامر)، وأنا كلي آذان صاغية ومستعد نلبي كلش.</p>
+                <p style="margin-top: 25px; font-weight: bold; color: #ff4d6d; font-size: 1.4rem;">نموت فيك يا فوفي! 💍👑</p>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        function triggerSurprise() {
-            // محاولة تشغيل الصوت عند الضغط
-            const music = document.getElementById('bgMusic');
-            music.play().catch(error => console.log("Audio waiting for valid local src file"));
+        // التحقق من كلمة السر "ليسا"
+        const correctPasswords = ["ليسا", "lisa"]; 
 
-            const prank = document.getElementById('prankScreen');
-            prank.style.opacity = '0';
+        function verifyPassword() {
+            const enteredInput = document.getElementById('passwordField').value.trim().toLowerCase();
             
-            setTimeout(() => {
-                prank.style.display = 'none';
-                document.body.classList.add('love-bg');
-                
-                const surprise = document.getElementById('surpriseScreen');
-                surprise.style.display = 'flex';
-                
-                setTimeout(() => {
-                    surprise.style.opacity = '1';
-                    startCounter();
-                    setInterval(createHeart, 300); // تفعيل تساقط القلوب
-                }, 100);
-            }, 1500);
-        }
-
-        function startCounter() {
-            // العداد مثبت على 72 يوم ويحسب الساعات والدقائق الحالية
-            document.getElementById('days').innerText = "72";
-
-            function updateTime() {
-                const now = new Date();
-                const h = now.getHours();
-                const m = now.getMinutes();
-                const s = now.getSeconds();
-
-                document.getElementById('hours').innerText = h < 10 ? '0' + h : h;
-                document.getElementById('minutes').innerText = m < 10 ? '0' + m : m;
-                document.getElementById('seconds').innerText = s < 10 ? '0' + s : s;
+            if (correctPasswords.includes(enteredInput)) { 
+                document.getElementById('lockScreen').style.display = 'none';
+                document.getElementById('mainContainer').style.display = 'block';
+            } else {
+                alert("امممم.. كلمة السر خطأ، فكري في اسم دلوعتنا الصغيرة! 🥺");
             }
-            updateTime();
-            setInterval(updateTime, 1000);
         }
 
-        function createHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('heart-particle');
-            heart.innerHTML = '❤️';
-            heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.fontSize = Math.random() * 15 + 15 + 'px';
-            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
-            heart.style.opacity = Math.random() * 0.7 + 0.3;
-            document.body.appendChild(heart);
+        function checkEnter(event) {
+            if (event.key === "Enter") { verifyPassword(); }
+        }
 
-            setTimeout(() => { heart.remove(); }, 5000);
+        function nextSlide(slideNumber) {
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+            document.getElementById('slide' + slideNumber).classList.add('active');
+        }
+
+        function runAway() {
+            const noBtn = document.getElementById('noBtn');
+            const container = document.getElementById('slide5');
+            const padding = 30;
+            const maxX = container.clientWidth - noBtn.clientWidth - padding;
+            const maxY = container.clientHeight - noBtn.clientHeight - 100;
+            const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
+            const randomY = Math.floor(Math.random() * maxY) - (maxY / 2);
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `calc(50% + ${randomX}px - ${noBtn.clientWidth / 2}px)`;
+            noBtn.style.top = `calc(65% + ${randomY}px)`;
+        }
+
+        function forgive() {
+            document.getElementById('decisionSection').style.display = 'none';
+            document.getElementById('happyMessage').style.display = 'block';
         }
     </script>
 </body>
